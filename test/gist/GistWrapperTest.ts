@@ -1,6 +1,7 @@
 import { getGistById, getGistsForUser, Gist } from '../../src/gist/GistWrapper';
 import { assert } from 'chai';
 
+//This does an actually http call, so is an integration test
 describe('GistWrapperTest', () => {
     it('should return gists for user', async () => {
         const result: Gist[] = await getGistsForUser('lizmstanley');

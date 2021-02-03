@@ -45,7 +45,7 @@ export interface Gist {
     updated_at: Date;
     description: string;
     comments: number;
-    user: string;
+    user: string | null;
     comments_url: string;
     owner: GistOwner;
     truncated: boolean;

@@ -1,0 +1,28 @@
+version: '3.8'
+
+networks:
+  skyspecs-network:
+
+services:
+  node-service:
+    container_name: skyspecs-node
+    networks:
+      - skyspecs-network
+    build:
+      context: .
+    depends_on:
+      - postgres-service
+
+  postgres-service:
+    container_name: skyspecs-postgres
+    networks:
+      - skyspecs-network
+    image: postgres:alpine
+    restart: always
+    env_file:
+      - ./db/db.env
+    volumes:
+      - ./data:/var/lib/postgresql/data/
+      - ./db/sql:/docker-entrypoint-initdb.d
+    ports:
+      - "5432:5432"
