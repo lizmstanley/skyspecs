@@ -1,7 +1,7 @@
 # Sample project
 
 * Requires docker and docker-compose.
-* To start, at the root of the project, execute `docker-compose up`
+* To start, at the root of the project, execute `cd node` and `docker-compose up`
 * To stop, execute `docker-compose down`
 * In a browser, open http://localhost:3000/api
 * Example queries (add argument values as needed):

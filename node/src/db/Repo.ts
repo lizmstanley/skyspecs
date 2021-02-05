@@ -76,7 +76,12 @@ export async function updateDbUserGist(githubId: string, isFavorite: boolean): P
 async function queryDbGists(queryWhereCondition: string, args?: string[]): Promise<DbUserGist[]> {
     const dbConnection: PoolClient = await getDbConnection();
     try {
-        const queryResult: QueryResult = await dbConnection.query(dbUserGistSelectSql(queryWhereCondition), args);
+        let queryResult: QueryResult;
+        if (args) {
+            queryResult = await dbConnection.query(dbUserGistSelectSql(queryWhereCondition), args);
+        } else {
+            queryResult = await dbConnection.query(dbUserGistSelectSql(queryWhereCondition));
+        }
         if (!queryResult || !queryResult.rows.length) {
             return [];
         }
@@ -91,7 +96,9 @@ async function queryDbGists(queryWhereCondition: string, args?: string[]): Promi
 
 function dbUserGistSelectSql(whereCondition: string): string {
     return (
-        'select skyspecs_user_gist.id as user_gist_id, skyspecs_user.id as user_id' +
+        'select ' +
+        'skyspecs_user_gist.id as user_gist_id, ' +
+        'skyspecs_user.id as user_id, ' +
         'github_gist_id, is_favorite, username ' +
         'from skyspecs_user_gist, skyspecs_user ' +
         `where ${whereCondition} ` +

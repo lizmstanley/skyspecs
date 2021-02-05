@@ -35,6 +35,7 @@ export async function getApiGistById(gistId: string): Promise<ApiGist | null> {
 
 export async function getApiGistFavorites(): Promise<ApiGist[]> {
     const favoriteGists: DbUserGist[] = await queryDbFavoriteGists();
+    console.info(`Found ${favoriteGists.length} favorites`);
     if (!favoriteGists.length) {
         return [];
     }
