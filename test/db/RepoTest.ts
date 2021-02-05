@@ -1,11 +1,11 @@
 //This is an integration test, requires a db to be up and running
 //Execute docker-compose up in the root of this projectk
 //Normally I'd have a separate db for testing
-import { insertGist, queryGist, queryUserGists, updateGist } from '../../src/db/Repo';
-import { Gist } from '../../src/gist/GistWrapper';
+import '../testenv';
+import { insertDbUserGist, queryDbUserGist, queryDbUserGists, updateDbUserGist } from '../../src/db/Repo';
+import { GithubGist } from '../../src/gist/GistWrapper';
 import { assert } from 'chai';
-import { create } from 'ts-node';
-import { DbUserGist } from '../../src/db/Model';
+import { DbUserGist } from '../../src/db/DbModel';
 const { v4: uuidv4 } = require('uuid');
 
 describe('RepoTest', () => {
@@ -14,24 +14,24 @@ describe('RepoTest', () => {
         const username: string = 'testuser';
         const gistId: string = uuidv4();
 
-        const insertResult: boolean = await insertGist(createGist(username, gistId));
+        const insertResult: boolean = await insertDbUserGist(createGist(username, gistId));
         assert(insertResult);
 
-        const queryUserGistsResult: DbUserGist[] = await queryUserGists(username);
+        const queryUserGistsResult: DbUserGist[] = await queryDbUserGists(username);
         assert(queryUserGistsResult.length);
 
-        let queryGistResult: DbUserGist | null = await queryGist(gistId);
+        let queryGistResult: DbUserGist | null = await queryDbUserGist(gistId);
         assert.isNotNull(queryGistResult);
         assert(!queryGistResult?.isFavorite);
 
-        await updateGist(gistId, true);
-        queryGistResult = await queryGist(gistId);
+        await updateDbUserGist(gistId, true);
+        queryGistResult = await queryDbUserGist(gistId);
         assert.isNotNull(queryGistResult);
         assert(queryGistResult?.isFavorite);
     });
 });
 
-function createGist(username: string, gistId: string): Gist {
+function createGist(username: string, gistId: string): GithubGist {
     return {
         url: 'https://api.github.com/gists/7813bdad0f086c62e0820c43dd4c8485',
         forks_url: 'https://api.github.com/gists/7813bdad0f086c62e0820c43dd4c8485/forks',
@@ -60,8 +60,8 @@ function createGist(username: string, gistId: string): Gist {
             },
         },
         public: true,
-        created_at: new Date(),
-        updated_at: new Date(),
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
         description: 'this is a test gist',
         comments: 0,
         user: null,

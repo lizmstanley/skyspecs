@@ -1,0 +1,6 @@
+# Not running inside docker, use localhost
+DB_HOST=localhost
+DB_DATABASE=skyspecs_db
+DB_PORT=5432
+DB_USER=skyspecs_user
+DB_PASSWORD=skyspecs_pass

@@ -2,15 +2,19 @@ import { AxiosResponse } from 'axios';
 import axios from 'axios';
 const baseUrl: string = 'https://api.github.com';
 
-export async function getGistsForUser(username: string): Promise<Gist[]> {
-    return sendGistRequest(`users/${username}/gists`);
+export async function getGithubGistsForUser(username: string): Promise<GithubGist[]> {
+    const githubGists: GithubGist[] = await sendGithubGistRequest(`users/${username}/gists`);
+    console.info(`Found ${githubGists ? githubGists.length : 0} gists for user ${username}`);
+    return githubGists;
 }
 
-export async function getGistById(gistId: string): Promise<Gist> {
-    return sendGistRequest(`gists/${gistId}`);
+export async function getGithubGistById(gistId: string): Promise<GithubGist> {
+    const githubGist: GithubGist = await sendGithubGistRequest(`gists/${gistId}`);
+    console.info(`Found ${!githubGist ? 'no' : 1} gist for gist id ${gistId}`);
+    return githubGist;
 }
 
-async function sendGistRequest(apiPath: string): Promise<any> {
+async function sendGithubGistRequest(apiPath: string): Promise<any> {
     const requestUrl = `${baseUrl}/${apiPath}`;
     console.info(`Querying url: ${requestUrl}`);
     const options: any = {
@@ -23,14 +27,14 @@ async function sendGistRequest(apiPath: string): Promise<any> {
     };
 
     try {
-        const response: AxiosResponse<Gist[]> = await axios(options);
+        const response: AxiosResponse<GithubGist[]> = await axios(options);
         return response.data;
     } catch (error) {
         throw new Error(`error sending ${options.method} request ${requestUrl}: ${error.message}`);
     }
 }
 
-export interface Gist {
+export interface GithubGist {
     url: string;
     forks_url: string;
     commits_url: string;
@@ -41,8 +45,8 @@ export interface Gist {
     html_url: string;
     files: GistFiles;
     public: boolean;
-    created_at: Date;
-    updated_at: Date;
+    created_at: string;
+    updated_at: string;
     description: string;
     comments: number;
     user: string | null;

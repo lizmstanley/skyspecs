@@ -12,6 +12,8 @@ services:
       context: .
     depends_on:
       - postgres-service
+    ports:
+      - "3000:3000"
 
   postgres-service:
     container_name: skyspecs-postgres
