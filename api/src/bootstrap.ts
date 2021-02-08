@@ -3,6 +3,7 @@ import { graphqlHTTP } from 'express-graphql';
 import { rootSchema } from './Schema';
 
 const express = require('express');
+const cors = require('cors');
 
 (() => {
     startServer();
@@ -10,6 +11,7 @@ const express = require('express');
 
 function startServer() {
     const server = express();
+    server.use(cors());
     server.use(
         '/api',
         graphqlHTTP({

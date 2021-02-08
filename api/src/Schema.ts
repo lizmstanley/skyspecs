@@ -20,7 +20,7 @@ const gistType = new GraphQLObjectType({
 const queryType = new GraphQLObjectType({
     name: 'Query',
     fields: {
-        user: {
+        userGists: {
             type: GraphQLList(gistType),
             args: {
                 username: { type: GraphQLString },
@@ -34,7 +34,7 @@ const queryType = new GraphQLObjectType({
             },
             resolve: async (source: any, { id }: any) => getApiGistById(id),
         },
-        favorites: {
+        favoriteGists: {
             type: GraphQLList(gistType),
             args: {},
             resolve: async () => getApiGistFavorites(),

@@ -4,18 +4,29 @@ networks:
   skyspecs-network:
 
 services:
-  node-service:
-    container_name: skyspecs-node
+  ui-service:
+    container_name: skyspecs-ui
     networks:
       - skyspecs-network
     build:
-      context: .
+      context: ./ui
     depends_on:
-      - postgres-service
+      - api-service
     ports:
       - "3000:3000"
 
-  postgres-service:
+  api-service:
+    container_name: skyspecs-api
+    networks:
+      - skyspecs-network
+    build:
+      context: ./api
+    depends_on:
+      - db-service
+    ports:
+      - "3001:3000"
+
+  db-service:
     container_name: skyspecs-postgres
     networks:
       - skyspecs-network
